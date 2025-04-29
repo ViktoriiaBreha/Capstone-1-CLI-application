@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -23,7 +24,7 @@ public class MainApp {
             System.out.println("(X) Exit");
             System.out.print("Enter your choice here: ");
             String menu_choice = scanner.nextLine();
-            scanner.nextLine();
+
 
             switch (menu_choice.toUpperCase()) {
                 case "D":
@@ -42,6 +43,7 @@ public class MainApp {
                         Thread.sleep(1000);
                     }
                     System.out.println("Thank you for using our application! See you soon!");
+                    scanner.close();
                     System.exit(0);
                 default:
                     System.out.println("Invalid selection, please choose again");
@@ -114,7 +116,7 @@ public class MainApp {
                 bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
                         pay_description, pay_vendor, pay_amount));
                 bufWriter.newLine();
-                System.out.print("Your payment information was added successfully!");
+                System.out.println("Your payment information was added successfully!");
             } else {
                 System.out.println("Wrong number, try again!");
             }
@@ -147,9 +149,11 @@ public class MainApp {
 
 
             }
+            bufReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return transactions;
 
 
@@ -172,10 +176,12 @@ public class MainApp {
             String choice_ledger = scanner.nextLine().trim();
 
             ArrayList<TransactionElements> transactionHistory = readTransactions();
+            Collections.reverse(transactionHistory);
 
             switch (choice_ledger.toUpperCase().trim()) {
                 case "A":
                     System.out.println("Your all entries: ");
+                    System.out.println("date | time | description | vendor | amount");
                     for (TransactionElements tran : transactionHistory) {
                         System.out.println(tran);
                     }
@@ -183,6 +189,7 @@ public class MainApp {
 
                 case "D":
                     System.out.println("Your all deposits: ");
+                    System.out.println("date | time | description | vendor | amount");
                     for (TransactionElements tran : transactionHistory) {
                         if (tran.getAmount() > 0) {
                             System.out.println(tran);
@@ -191,6 +198,7 @@ public class MainApp {
                     break;
                 case "P":
                     System.out.println("Your all payments: ");
+                    System.out.println("date | time | description | vendor | amount");
                     for (TransactionElements tran : transactionHistory) {
                         if (tran.getAmount() < 0) {
                             System.out.println(tran);
@@ -218,6 +226,7 @@ public class MainApp {
                         switch (number_choice) {
                             case 1:
                                 System.out.println("Month To Date report: ");
+                                System.out.println("date | time | description | vendor | amount");
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getMonth() == today.getMonth() && tran.getDate().getYear() == today.getYear()) {
                                         System.out.println(tran);
@@ -226,6 +235,7 @@ public class MainApp {
                                 break;
                             case 2:
                                 System.out.println("Previous Month report: ");
+                                System.out.println("date | time | description | vendor | amount");
                                 LocalDate today_day = today.withDayOfMonth(1);
                                 LocalDate last_month_day = today_day.minusMonths(1);
                                 for (TransactionElements tran : transactionHistory) {
@@ -236,6 +246,7 @@ public class MainApp {
                                 break;
                             case 3:
                                 System.out.println("Year To Date report: ");
+                                System.out.println("date | time | description | vendor | amount");
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getYear() == today.getYear()) {
                                         System.out.println(tran);
@@ -244,6 +255,7 @@ public class MainApp {
                                 break;
                             case 4:
                                 System.out.println("Previous Year report: ");
+                                System.out.println("date | time | description | vendor | amount");
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getYear() == today.getYear() - 1) {
                                         System.out.println(tran);
@@ -252,10 +264,11 @@ public class MainApp {
                                 break;
                             case 5:
                                 System.out.println("Search by Vendor: ");
+                                System.out.println("date | time | description | vendor | amount");
                                 System.out.print("Enter name of vendor: ");
                                 String vendor_search = scanner.nextLine().trim();
                                 for (TransactionElements tran : transactionHistory) {
-                                    if (tran.getVendor().contains(vendor_search)) {
+                                    if (tran.getVendor().equalsIgnoreCase(vendor_search)) {
                                         System.out.println(tran);
                                     }
                                 }
