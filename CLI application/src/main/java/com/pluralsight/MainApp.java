@@ -14,7 +14,6 @@ public class MainApp {
         ArrayList<TransactionElements> transactions = new ArrayList<>();
 
         System.out.println("----Hi! Welcome to our CLI application----");
-        System.out.println(" ");
 
         while (true) {
             System.out.println("Please choose from options below: ");
@@ -24,6 +23,7 @@ public class MainApp {
             System.out.println("(X) Exit");
             System.out.print("Enter your choice here: ");
             String menu_choice = scanner.nextLine();
+            scanner.nextLine();
 
             switch (menu_choice.toUpperCase()) {
                 case "D":
@@ -73,7 +73,8 @@ public class MainApp {
 
             if (dep_amount > 0) {
                 TransactionElements dep_transaction = new TransactionElements(date, time, dep_description, dep_vendor, dep_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time, dep_description, dep_vendor, dep_amount));
+                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
+                        dep_description, dep_vendor, dep_amount));
                 bufWriter.newLine();
                 System.out.println("Your deposit information was added successfully!");
 
@@ -109,8 +110,9 @@ public class MainApp {
 
             if (pay_amount > 0) {
                 pay_amount = -pay_amount;
-                TransactionElements pay_transaction = new TransactionElements(date,time, pay_description, pay_vendor, pay_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time, pay_description, pay_vendor, pay_amount));
+                TransactionElements pay_transaction = new TransactionElements(date, time, pay_description, pay_vendor, pay_amount);
+                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
+                        pay_description, pay_vendor, pay_amount));
                 bufWriter.newLine();
                 System.out.print("Your payment information was added successfully!");
             } else {
@@ -132,6 +134,7 @@ public class MainApp {
             String line;
 
             while ((line = bufReader.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(Pattern.quote("|").trim());
                 LocalDate date = LocalDate.parse(parts[0].trim());
                 LocalTime time = LocalTime.parse(parts[1].trim());
@@ -139,8 +142,7 @@ public class MainApp {
                 String vendor = parts[3].trim();
                 double amount = Double.parseDouble(parts[4].trim());
 
-                TransactionElements transaction = new TransactionElements(date, time, description, vendor,
-                        amount);
+                TransactionElements transaction = new TransactionElements(date, time, description, vendor, amount);
                 transactions.add(transaction);
 
 
@@ -167,45 +169,110 @@ public class MainApp {
             System.out.println("(R) Reports");
             System.out.println("(H) Home");
             System.out.print("Enter your choice here: ");
-            String choice_ledger = scanner.nextLine();
+            String choice_ledger = scanner.nextLine().trim();
 
             ArrayList<TransactionElements> transactionHistory = readTransactions();
 
-            switch (choice_ledger.toUpperCase()) {
+            switch (choice_ledger.toUpperCase().trim()) {
                 case "A":
                     System.out.println("Your all entries: ");
-                    for (TransactionElements tran : transactionHistory){
+                    for (TransactionElements tran : transactionHistory) {
                         System.out.println(tran);
                     }
                     break;
 
                 case "D":
                     System.out.println("Your all deposits: ");
-                    for (TransactionElements tran : transactionHistory){
-                        if (tran.getAmount() > 0 ){
+                    for (TransactionElements tran : transactionHistory) {
+                        if (tran.getAmount() > 0) {
                             System.out.println(tran);
                         }
                     }
                     break;
                 case "P":
                     System.out.println("Your all payments: ");
-                    for (TransactionElements tran : transactionHistory){
-                        if (tran.getAmount()<0){
+                    for (TransactionElements tran : transactionHistory) {
+                        if (tran.getAmount() < 0) {
                             System.out.println(tran);
                         }
                     }
                     break;
                 case "R":
-                    System.out.println("What reports do you want to look on?");
-                    System.out.println("1) Month To Date");
-                    System.out.println("2) Previous Month");
-                    System.out.println("3) Year to Date");
-                    System.out.println("4) Previous Year");
-                    System.out.println("5) Search by Vendor");
-                    System.out.println("0) Back");
-                    System.out.print("Your number choice: ");
-                    int number_choice = scanner.nextInt();
-                    
+
+                    boolean report_menu = true;
+                    while (report_menu) {
+                        System.out.println("What reports do you want to look on?");
+                        System.out.println("1) Month To Date");
+                        System.out.println("2) Previous Month");
+                        System.out.println("3) Year to Date");
+                        System.out.println("4) Previous Year");
+                        System.out.println("5) Search by Vendor");
+                        System.out.println("0) Back");
+                        System.out.print("Your number choice: ");
+                        int number_choice = scanner.nextInt();
+                        scanner.nextLine();
+
+
+                        LocalDate today = LocalDate.now();
+// Interesting part
+                        switch (number_choice) {
+                            case 1:
+                                System.out.println("Month To Date report: ");
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getDate().getMonth() == today.getMonth() && tran.getDate().getYear() == today.getYear()) {
+                                        System.out.println(tran);
+                                    }
+                                }
+                                break;
+                            case 2:
+                                System.out.println("Previous Month report: ");
+                                LocalDate today_day = today.withDayOfMonth(1);
+                                LocalDate last_month_day = today_day.minusMonths(1);
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getDate().getMonth() == last_month_day.getMonth() && tran.getDate().getYear() == last_month_day.getYear()) {
+                                        System.out.println(tran);
+                                    }
+                                }
+                                break;
+                            case 3:
+                                System.out.println("Year To Date report: ");
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getDate().getYear() == today.getYear()) {
+                                        System.out.println(tran);
+                                    }
+                                }
+                                break;
+                            case 4:
+                                System.out.println("Previous Year report: ");
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getDate().getYear() == today.getYear() - 1) {
+                                        System.out.println(tran);
+                                    }
+                                }
+                                break;
+                            case 5:
+                                System.out.println("Search by Vendor: ");
+                                System.out.print("Enter name of vendor: ");
+                                String vendor_search = scanner.nextLine().trim();
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getVendor().contains(vendor_search)) {
+                                        System.out.println(tran);
+                                    }
+                                }
+                                break;
+
+                            case 0:
+                                report_menu = false;
+                                System.out.println("Returning back");
+                                break;
+                            default:
+                                System.out.println("Invalid selection, please try again");
+                                break;
+                        }
+                    }
+
+                    break;
+
                 case "H":
                     System.out.println("Returning to the main menu...");
                     int i;
