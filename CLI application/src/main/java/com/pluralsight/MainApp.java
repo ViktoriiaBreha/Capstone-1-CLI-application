@@ -15,6 +15,7 @@ public class MainApp {
         ArrayList<TransactionElements> transactions = new ArrayList<>();
 
         System.out.println("----Hi! Welcome to our CLI application----");
+        System.out.println(" ");
 
         while (true) {
             System.out.println("Please choose from options below: ");
@@ -75,7 +76,7 @@ public class MainApp {
 
             if (dep_amount > 0) {
                 TransactionElements dep_transaction = new TransactionElements(date, time, dep_description, dep_vendor, dep_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
+                bufWriter.write(String.format("%s | %s | %s | %s | $ %.2f", formatting_date, formatting_time,
                         dep_description, dep_vendor, dep_amount));
                 bufWriter.newLine();
                 System.out.println("Your deposit information was added successfully!");
@@ -113,7 +114,7 @@ public class MainApp {
             if (pay_amount > 0) {
                 pay_amount = -pay_amount;
                 TransactionElements pay_transaction = new TransactionElements(date, time, pay_description, pay_vendor, pay_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
+                bufWriter.write(String.format("%s | %s | %s | %s | $ %.2f", formatting_date, formatting_time,
                         pay_description, pay_vendor, pay_amount));
                 bufWriter.newLine();
                 System.out.println("Your payment information was added successfully!");
@@ -227,10 +228,14 @@ public class MainApp {
                             case 1:
                                 System.out.println("Month To Date report: ");
                                 System.out.println("date | time | description | vendor | amount");
+                                boolean check = false;
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getMonth() == today.getMonth() && tran.getDate().getYear() == today.getYear()) {
                                         System.out.println(tran);
+                                        check = true;
                                     }
+                                } if (!check){
+                                    System.out.println("Information is not found");
                                 }
                                 break;
                             case 2:
@@ -238,28 +243,42 @@ public class MainApp {
                                 System.out.println("date | time | description | vendor | amount");
                                 LocalDate today_day = today.withDayOfMonth(1);
                                 LocalDate last_month_day = today_day.minusMonths(1);
-                                for (TransactionElements tran : transactionHistory) {
-                                    if (tran.getDate().getMonth() == last_month_day.getMonth() && tran.getDate().getYear() == last_month_day.getYear()) {
-                                        System.out.println(tran);
+                                boolean check1 = false;
+                                    for (TransactionElements tran : transactionHistory) {
+                                        if (tran.getDate().getMonth() == last_month_day.getMonth() && tran.getDate().getYear() == last_month_day.getYear()) {
+                                            System.out.println(tran);
+                                            check1 = true;
+                                        }
                                     }
-                                }
+                                    if (!check1) {System.out.println("Information is not found");}
+
+
+
                                 break;
                             case 3:
                                 System.out.println("Year To Date report: ");
                                 System.out.println("date | time | description | vendor | amount");
-                                for (TransactionElements tran : transactionHistory) {
+                                boolean check2 = false;
+                                    for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getYear() == today.getYear()) {
                                         System.out.println(tran);
+                                        check2 = true;
                                     }
+                                } if (!check2){
+                                    System.out.println("Information is not found");
                                 }
                                 break;
                             case 4:
                                 System.out.println("Previous Year report: ");
                                 System.out.println("date | time | description | vendor | amount");
+                                boolean check3 = false;
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getYear() == today.getYear() - 1) {
                                         System.out.println(tran);
+                                        check3 = true;
                                     }
+                                } if (!check3){
+                                    System.out.println("Information is not found");
                                 }
                                 break;
                             case 5:
@@ -267,10 +286,14 @@ public class MainApp {
                                 System.out.println("date | time | description | vendor | amount");
                                 System.out.print("Enter name of vendor: ");
                                 String vendor_search = scanner.nextLine().trim();
+                                boolean check4 = false;
                                 for (TransactionElements tran : transactionHistory) {
                                     if (tran.getVendor().equalsIgnoreCase(vendor_search)) {
                                         System.out.println(tran);
+                                        check4 = true;
                                     }
+                                } if (!check4){
+                                    System.out.println("Information is not found");
                                 }
                                 break;
 
