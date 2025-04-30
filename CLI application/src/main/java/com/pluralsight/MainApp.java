@@ -234,7 +234,8 @@ public class MainApp {
                                         System.out.println(tran);
                                         check = true;
                                     }
-                                } if (!check){
+                                }
+                                if (!check) {
                                     System.out.println("Information is not found");
                                 }
                                 break;
@@ -244,14 +245,15 @@ public class MainApp {
                                 LocalDate today_day = today.withDayOfMonth(1);
                                 LocalDate last_month_day = today_day.minusMonths(1);
                                 boolean check1 = false;
-                                    for (TransactionElements tran : transactionHistory) {
-                                        if (tran.getDate().getMonth() == last_month_day.getMonth() && tran.getDate().getYear() == last_month_day.getYear()) {
-                                            System.out.println(tran);
-                                            check1 = true;
-                                        }
+                                for (TransactionElements tran : transactionHistory) {
+                                    if (tran.getDate().getMonth() == last_month_day.getMonth() && tran.getDate().getYear() == last_month_day.getYear()) {
+                                        System.out.println(tran);
+                                        check1 = true;
                                     }
-                                    if (!check1) {System.out.println("Information is not found");}
-
+                                }
+                                if (!check1) {
+                                    System.out.println("Information is not found");
+                                }
 
 
                                 break;
@@ -259,12 +261,13 @@ public class MainApp {
                                 System.out.println("Year To Date report: ");
                                 System.out.println("date | time | description | vendor | amount");
                                 boolean check2 = false;
-                                    for (TransactionElements tran : transactionHistory) {
+                                for (TransactionElements tran : transactionHistory) {
                                     if (tran.getDate().getYear() == today.getYear()) {
                                         System.out.println(tran);
                                         check2 = true;
                                     }
-                                } if (!check2){
+                                }
+                                if (!check2) {
                                     System.out.println("Information is not found");
                                 }
                                 break;
@@ -277,7 +280,8 @@ public class MainApp {
                                         System.out.println(tran);
                                         check3 = true;
                                     }
-                                } if (!check3){
+                                }
+                                if (!check3) {
                                     System.out.println("Information is not found");
                                 }
                                 break;
@@ -292,7 +296,8 @@ public class MainApp {
                                         System.out.println(tran);
                                         check4 = true;
                                     }
-                                } if (!check4){
+                                }
+                                if (!check4) {
                                     System.out.println("Information is not found");
                                 }
                                 break;
