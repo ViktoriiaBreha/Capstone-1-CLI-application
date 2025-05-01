@@ -76,7 +76,7 @@ public class MainApp {
 
             if (dep_amount > 0) {
                 TransactionElements dep_transaction = new TransactionElements(date, time, dep_description, dep_vendor, dep_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | $ %.2f", formatting_date, formatting_time,
+                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
                         dep_description, dep_vendor, dep_amount));
                 bufWriter.newLine();
                 System.out.println("Your deposit information was added successfully!");
@@ -114,7 +114,7 @@ public class MainApp {
             if (pay_amount > 0) {
                 pay_amount = -pay_amount;
                 TransactionElements pay_transaction = new TransactionElements(date, time, pay_description, pay_vendor, pay_amount);
-                bufWriter.write(String.format("%s | %s | %s | %s | $ %.2f", formatting_date, formatting_time,
+                bufWriter.write(String.format("%s | %s | %s | %s | %.2f", formatting_date, formatting_time,
                         pay_description, pay_vendor, pay_amount));
                 bufWriter.newLine();
                 System.out.println("Your payment information was added successfully!");
